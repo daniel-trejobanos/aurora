@@ -1,0 +1,37 @@
+---
+title: "Exploration"
+output: html_notebook
+---
+
+We will load the data small simulated data set
+
+```{r}
+library(tidyverse)
+ts_data = read_csv("../sim/data/ar1.csv")
+```
+
+
+```{r}
+library(ggfortify)
+pca <- prcomp(ts_data, scale. = TRUE)
+autoplot(pca)
+```
+
+```{r}
+library(vsp)
+fa <- ts_data %>% as.matrix() %>% vsp( rank = 10)
+```
+
+```{r}
+plot_varimax_z_pairs(fa, 1:5)
+
+```
+
+```{r}
+plot_varimax_y_pairs(fa, 1:5)
+```
+
+```{r}
+qplot(1:1000, ts_data[,1] %>% as_vector(), geom="line")
+```
+
