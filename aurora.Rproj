@@ -1,0 +1,23 @@
+Version: 1.0
+
+RestoreWorkspace: No
+SaveWorkspace: No
+AlwaysSaveHistory: No
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
+
+QuitChildProcessesOnExit: Yes
+
+ZoteroLibraries: "My Library"
+
+PythonType: conda
+PythonVersion: 3.9.12
+PythonPath: ~/opt/anaconda3/envs/aurora/bin/python3.9
+
+SpellingDictionary: en_GB
