@@ -1,0 +1,18 @@
+CAMx Version       |VERSION6.5
+Gas Mechanism      |
+Aerosol Treatment  |INERT
+Inorganic PM Chem  |
+Organic PM Chem    |
+Description        |Inert tracers
+Num gas            |1
+Num PM, dt, sz bins|2 15.0 2 0.039 2.5 10.0
+Num reactions      |0
+Num prim photo rxns|0
+Num sec photo rxns |0
+SrfMod #spc, #rxns |0 0
+Species Records
+     Gas Spec   lower bnd     H-law    T-fact     Molwt  Reactvty    Rscale
+  1  TGAS        1.00E-15  1.00e-10        0.     18.00       0.0        1.
+     Aero Spec  lower bnd   Density  Dry Bext RH Adjust       SSA   SizeBin
+  1  TFINE       1.00E-15       3.0       0.0         0      0.00         1
+  2  TCORS       1.00E-15       3.0       0.0         0      0.00         2
