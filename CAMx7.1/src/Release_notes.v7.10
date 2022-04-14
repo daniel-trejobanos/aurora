@@ -1,0 +1,154 @@
+RELEASE NOTES for CAMx v7.10, 1/5/21
+
+The Comprehensive Air Quality Model with extensions (CAMx) is available at
+http://www.camx.com.  
+
+
+Overview of Version 7.10
+------------------------
+
+V7.10 includes new features, modifications, and bug fixes from the previous
+release (v7.00)
+
+* Use the chemistry parameters files specifically labeled for v7.1.
+* The TUV photolysis input files include some format changes; see below for
+  details.
+* The CAMx control namelist file has not changed since the last version.
+* The operation of the CAMx makefile has not changed since the last version.
+  Type "make" or "make help" for more information.
+  NOTE: RECENT VERSIONS OF THE GFORTRAN COMPILER WILL NOT COMPILE CAMx
+        WITH OMP PARALLELIZATION BECAUSE OF AN INCOMPATIBILITY WITH BLOCK
+        DATA IN ISORROPIA. THIS IS NOT AN ISSUE WITH OTHER SUPPORTED COMPILERS.
+        OPTIONS:
+        a) USE MPI ONLY WITH GFORTRAN
+        b) REVERT BACK TO AN OLDER VERSION OF GFORTRAN
+        c) USE A DIFFERENT COMPILER
+
+
+v7.10 New Features and Major Updates
+------------------------------------
+1. CB6 revision 5 (CB6r5) incorporates recent updates to chemical reactions
+   for inorganic and simple organic species that play important roles in ozone
+   formation. One new reaction was added.
+
+   Implications: Generally small changes in ozone concentrations within a few
+                 ppb.
+
+
+v7.10 Modifications
+-------------------
+
+1. Requirements to include nested grid buffer cells on gridded emission
+   input files have been relaxed and all gridded output files no longer include
+   buffer cells.
+
+   Implication:  The inclusion of buffer cells was historically required on all
+                 gridded input files, even though data in those cells are not
+                 used by the model.  CAMx continues to allow for emission files
+                 that include buffer cells to maintain backward compatibility
+                 with older datasets.
+
+                 Nested grid buffer cells continue to be required on input
+                 meteorological files because they provide the needed space to
+                 store the staggered wind fields.  
+
+                 No further post-processing will be necessary to remove unused
+                 buffer grid cells from the output arrays.
+
+2. Plume depth override has been added to NCF point source files.
+
+   Implications: Fortran binary point source files include an option to specify
+                 plume top/bottom heights to override the internal plume rise
+                 algorithm in CAMx.  This option has been extended to the NCF
+                 point source files for consistency.
+
+3. TUV photolysis input files have been updated to include a more specific
+   version label on the first record.
+
+   Implications: The label now specifically includes TUV version, CAMx version,
+                 and photochemical mechanism version to help ensure proper
+                 photolysis rates are provided to CAMx for the chosen mechanism.
+
+4. The ammonia bidirectional scheme has been updated for landuse categories
+   associated with high anthropogenic ammonia emissions.
+
+   Implications: A logic error was fixed that was prohibiting both deposition
+                 and re-emission of ammonia for landuse categories that are
+                 associated with high ammonia emission rates (fertilization or
+                 animal waste).  Now only deposition is allowed for these
+                 landuse categories because in such areas: explicit ammonia
+                 emissions are provided to the model, resulting ambient
+                 ammonia concentrations are high, and deposition should
+                 dominate (otherwise bidirectional NH3 emissions would
+                 double-count the explicit emissions).  This restriction was
+                 extended to include grasslands.
+
+5. Updated the wet and dry deposition treatment for the RTCMC component of
+   RTRAC.
+
+   Implication: RTCMC dry and wet deposition parameters are now defined, and
+                deposition rates are calculated, in a manner consistent with the
+                standard RTRAC methodology.
+
+6. Added explicit requirement that APCA must be invoked when using NH3 bidi
+   with SAT to ensure user supplies natural source emissions file as first SAT
+   emission category.
+
+   Implications: NH3 bidi emissions are attributed to "natural" emission
+                 category in SAT, similar to APCA for ozone source
+                 apportionment. The APCA option requires natural emissions
+                 (e.g., biogenic) to be listed as source category 1. If you are
+                 running NH3 bidi with SAT pay careful attention to the APCA
+                 option and your input list of emission files.
+
+v7.10 Bug Fixes
+---------------
+
+1. Fixed several bugs in improperly injecting emissions into nested grids.
+
+   Implications:
+   a) Under certain conditions 3D emission files for SAT were not properly
+      injected into nested grids.
+   b) When running >2 grids, core and Probing Tools emissions were emitted
+      incorrectly into grids 3+.
+
+      Non-fatal errors, but resulted in obviously incorrect results.
+
+2. Fixed bug that improperly mapped point source species to model species
+   when running SAT.
+
+   Implications: Core model point source species were improperly injected
+                 affecting core model concentrations and by extension SAT
+                 concentrations.
+
+3. Fixed bugs writing DDM output and restart files for nested grids when DDM is
+   set to calculate sensitivities only for a specific grid.
+
+   Implications: DDM output for single nested grids is now properly generated. 
+
+4. Fixed several NCF I/O bugs:
+   a) Changed CAMx file type global attribute from "NAME" to "CAMX_NAME" to
+      alleviate conflicts with updated C libraries introduced in NCF v4.6.2.
+      Caused fatal model crashes.
+   c) Fixed a source apportionment bug related to using NCF meteorological
+      inputs with binary IC/BC files to calculate IC/BC reactivity.
+      Led to fatal model stop.
+   d) Fixed incorrect global attributes for grid dimensions in output files.
+      Non-fatal.
+   e) Fixed the VARLIST global attribute to use proper 16-character string
+      lengths (specific to IO-API)
+      Non-fatal but affected ability to post-process output files using
+      I/O-API tools.
+   f) Fix bug to expand NCF file type string lengths to avoid read errors.
+      Avoids fatal model stop when reading certain NCF input files.
+
+3. Fixed a bug in PiG that was rarely locating puffs in improper grid cells.
+
+   Implications: Single-precision math was occasionally locating PiG puffs in
+                 neighboring cells, leading to model stop due to reaching a
+                 maximum number of iterations from crossing cell borders.
+
+4. Fixed NH3 bidi emissions bug that was not emitting NH3 for the core model.   
+
+   Implications: NH3 bidi emissions were only emitted for core model when
+                 SAT or DDM was enabled.  
