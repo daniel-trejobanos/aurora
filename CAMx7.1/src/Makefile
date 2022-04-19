@@ -58,7 +58,7 @@
 #    -lnetcdff -lnetcdf
 #
 MPI_INST = /usr/local/mpich3
-NCF_INST = /usr/local/netcdf
+NCF_INST = /usr/src/aurora/util/build/netcdf-c-4.6.1
 
 DUM_MPI = ./Dummy_MPI
 DUM_NCF = ./Dummy_NCF
