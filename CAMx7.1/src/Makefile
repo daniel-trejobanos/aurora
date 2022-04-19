@@ -213,7 +213,7 @@ ifneq (, $(findstring $(COMPILER),pgf pgfomp))
        FC = $(MPI_INST)/bin/mpif90
        CC = $(MPI_INST)/bin/mpicc
     endif
-    FLGS = $(INCLUDES) -mcmodel=medium -O2 -Mdalign -Mextend -Mnoframe -byteswapio -Bstatic_pgi
+    FLGS = $(INCLUDES) -mcmodel=small -O2 -Mdalign -Mextend -Mnoframe -byteswapio -Bstatic_pgi
     ifeq ($(COMPILER),pgfomp)
        FLGS_OMP = -mp
     endif
@@ -228,7 +228,7 @@ else ifneq (, $(findstring $(COMPILER),ifort ifortomp))
        FC = $(MPI_INST)/bin/mpif90
        CC = $(MPI_INST)/bin/mpicc
     endif
-    FLGS = $(INCLUDES) -mcmodel=medium -O2 -align dcommons -extend_source -convert big_endian
+    FLGS = $(INCLUDES) -mcmodel=small -O2 -align dcommons -extend_source -convert big_endian
     MODULES=-I${MOD_DIR} -module ${MOD_DIR}
     ifeq ($(COMPILER),ifortomp)
        FLGS_OMP = -openmp
@@ -247,7 +247,7 @@ else ifneq (, $(findstring $(COMPILER),absoft absoftomp))
 else ifneq (, $(findstring $(COMPILER),gfortran gfortranomp))
     FC = gfortran
     CC = gcc
-    FLGS=$(INCLUDES) -O2 -mcmodel=medium -J${MOD_DIR} -fno-align-commons -fconvert=big-endian -frecord-marker=4 -ffixed-line-length-0
+    FLGS=$(INCLUDES) -O2 -mcmodel=small -J${MOD_DIR} -fno-align-commons -fconvert=big-endian -frecord-marker=4 -ffixed-line-length-0
     MODULES=-I${MOD_DIR}
     ifneq (, $(findstring $(MPI_STRING),mpich MPICH mpich3 MPICH3 openmpi openMPI mvapich OPENMPI MVAPICH))
        FC = $(MPI_INST)/bin/mpif90
