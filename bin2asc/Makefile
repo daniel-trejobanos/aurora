@@ -1,11 +1,11 @@
-F90  = pgf90
-FLGS =  -byteswapio -Bstatic_pgi
+# F90  = pgf90
+# FLGS =  -byteswapio -Bstatic_pgi
 
 ###F90  = ifort
 ###FLGS =  -convert big_endian
 
-###F90  = gfortran
-###FLGS =  -fconvert=big-endian -frecord-marker=4
+F90  = gfortran
+FLGS =  -fconvert=big-endian -frecord-marker=4
 
 LIBS = 
 
