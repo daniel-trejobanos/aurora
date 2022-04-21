@@ -3,7 +3,9 @@
 .RData
 .Ruserdata
 CAMx6.5/build
-CAMx6.5/test_run_data
+CAMx6.5/test_run_data/*
+!CAMx6.5/test_run_data/runfiles/*
 CAMx7.1/build
-CAMx7.1/test_run_data
+CAMx7.1/test_run_data/*
+!CAMx7.1/test_run_data/runfiles/*
 renv
