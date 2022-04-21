@@ -1,0 +1,118 @@
+INTRODUCTION
+------------
+
+This is the README file for the CAMx model that includes information about:
+1) License agreement
+2) CAMx e-mail contacts
+3) Upgrading to the latest version of CAMx
+4) The distributed test case
+
+Further details about CAMx are provided in the Release Notes and in the CAMx
+User's Guide, available from:
+
+http://www.camx.com.
+
+
+1. LICENSE AGREEMENT
+--------------------
+
+Read the "LICENSE" file included with the source code.
+The LICENSE is also available from the CAMx download page at:
+http://www.camx.com/download/agreement-form.aspx.
+You agree to the CAMx license terms by downloading the source code and using
+the CAMx model.
+
+
+2. CAMx E-MAIL CONTACTS
+-----------------------
+
+Join the CAMx User's Group by sending an e-mail message to:
+
+ majordomo "at" environ "dot" org
+
+Put the words "subscribe CAMxusers" in the body of the message.  When you
+subscribe, Majordomo will send you a reply that provides details on how to use
+this list-serve.
+
+The "camxusers" group is meant for broadcasting useful information about CAMx
+and its pre- and post-processors to all users that subscribe to this group, or
+to ask about available datasets or issues that other users may have come across.
+It is not meant for asking how to run CAMx, how to prepare inputs, or why CAMx
+arrived at a particular prediction.
+
+              ** PLEASE REFER TO THE DOCUMENTATION FIRST **
+
+Please direct specific comments or questions about problems or bugs with CAMx or
+its support software to:
+
+ ask-camx "at" environ "dot" org
+
+which comes directly to the developers.
+
+
+3. UPGRADING TO CAMx V7 FROM PREVIOUS VERSIONS
+----------------------------------------------
+
+V7.x is a major update from previous releases (v6.x).  In general, all of the
+inputs developed for CAMx prior to v7 can be used in v7+ versions, except for
+O3MAP and TUV photolysis input files -- you must re-generate these.  Version 7
+introduces netCDF input file formats for all large gridded arrays: meteorology,
+landcover, initial/boundary/top concentrations, point sources, 2-D and 3-D
+emissions.  Output concentration, deposition and Probing Tool files can also be
+generated in netCDF format (since v6.5).  The Fortran binary I/O formats are
+still allowed, but this option will be removed in the future. 
+
+Multiple point, 2-D and 3-D emission files can be provided to CAMx and Probing
+Tools, alleviating the need to merge component emissions into single input
+files.  Except for the new 3-D emissions file, which must be in netCDF format,
+multiple emission files can be netCDF or Fortran binary format, or any mix of
+the two.
+
+NOTE on Source Apportionment Technology (SAT): With this change, SAT input
+      emission files are used to define emissions for BOTH the core model and
+      the SAT application.  In earlier CAMx versions, separate sets of core
+      and SAT files were listed and the model compared gridded and point
+      emissions to core model inputs to ensure consistency.  ALL SAT point
+      emissions are always used for BOTH SAT and the core model.  A
+      "leftover" capability remains available for gridded emissions, based on
+      differences between SAT emission inputs and core model emission inputs,
+      but not for point emissions. It is no longer necessary to provide a
+      consistent list of point sources among all of the SAT point source
+      files.  The list of points to model are now an internal concatonation
+      of point source lists from each input SAT point source file.
+
+NOTE on DDM and RTRAC: With this change, DDM and RTRAC input point source
+      emission files can include stack lists that are entirely unique to
+      these Probing Tools.  Earlier CAMx versions required a consistent list
+      of point sources among the core model, DDM and RTRAC, which was
+      onerous.  This restriction is removed.
+
+See the User's Guide for more information on file formats, requirements and
+restrictions.
+
+The CAMx namelist control file has changed significantly in this release; refer
+to the namelist template provided with the source code and the User's Guide for
+a full list of namelist variables.  Some namelist variables have been removed,
+some new variables are added.
+
+Visit www.camx.com to obtain the latest code, version-specific input files 
+(e.g., chemistry parameters) and all test case I/O.
+
+
+4. CAMx TEST CASE
+-----------------
+
+A new test case is provided to help new CAMx User's get started and permit
+performance benchmarking.  The test case is based on the US EPA's 2016 Modeling
+Platform, with a single nested domain covering the Eastern U.S.  The test case
+includes inputs and outputs for 2 days of simulation over June 10-11, 2016,
+which are available at www.camx.com.
+
+You can compare your results to the test case benchmark by displaying
+the concentration outputs using graphics programs.  You can perform a more
+rigorous check by comparing the concentration outputs using the "AVGDIF" 
+program. 
+
+AVGDIF is on the CAMx web site in the download/support programs area.
+We expect concentrations to agree within the limits of single precision
+calculation, namely relative errors of about 1 in 100,000.
