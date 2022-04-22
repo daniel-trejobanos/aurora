@@ -1,0 +1,41 @@
+---
+title: "Krakov exploration    "
+output: html_notebook
+---
+
+First, let's load the Krakow data
+```{r}
+library(tidyverse)
+ts_data = read_csv("../data/observations/krakov.csv")
+```
+
+```{r}
+ts_data <- ts_data %>% select(-timestamp)
+library(ggfortify)
+pca <- prcomp(ts_data, scale. = TRUE)
+autoplot(pca)
+```
+
+```{r}
+library(vsp)
+fa <- ts_data %>% as.matrix() %>% vsp( rank = 3)
+```
+
+```{r}
+plot_varimax_z_pairs(fa)
+```
+```{r}
+barplot(fa$Y[,3])
+```
+```{r}
+screeplot(fa)
+```
+
+```{r}
+pmf_data <-  read_csv("../data/pmf/krakov_pmf.csv")
+pmf_data <- pmf_data %>% select(-timestamp)
+```
+```{r}
+cor(pmf_data, as.matrix(fa$Z), use = "pairwise.complete.obs")
+```
+
