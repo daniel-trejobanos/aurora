@@ -7,18 +7,33 @@ First, let's load the Krakow data
 ```{r}
 library(tidyverse)
 ts_data = read_csv("../data/observations/krakov.csv")
+ts_data <- ts_data %>% 
+    complete(timestamp = seq(timestamp[1], timestamp[length(timestamp)], by = "30 min"))
 ```
 
 ```{r}
-ts_data <- ts_data %>% select(-timestamp)
+timestamp = ts_data$timestamp
+ts_data <- ts_data %>% select(-timestamp) %>% select(-"12") %>% select(-"37")
+ts_data
+```
+
+```{r}
 library(ggfortify)
-pca <- prcomp(ts_data, scale. = TRUE)
+imputed_ts_data <- apply(ts_data, MARGIN = 2, \(x){
+  y=x
+  y[is.na(x)]=mean(x,na.rm=TRUE)
+  y
+  } )
+```
+
+```{r}
+pca <- prcomp(imputed_ts_data, scale. = TRUE)
 autoplot(pca)
 ```
 
 ```{r}
 library(vsp)
-fa <- ts_data %>% as.matrix() %>% vsp( rank = 3)
+fa <- imputed_ts_data %>% as.matrix() %>% vsp( rank = 11)
 ```
 
 ```{r}
@@ -33,9 +48,33 @@ screeplot(fa)
 
 ```{r}
 pmf_data <-  read_csv("../data/pmf/krakov_pmf.csv")
+pmf_data <- pmf_data %>% complete(timestamp = seq(timestamp[1], timestamp[length(timestamp)], by = "30 min"))
 pmf_data <- pmf_data %>% select(-timestamp)
+
 ```
 ```{r}
 cor(pmf_data, as.matrix(fa$Z), use = "pairwise.complete.obs")
+```
+
+```{r}
+library(fastICA)
+ica_sol <- fastICA(as.matrix(imputed_ts_data), 11, alg.typ = "deflation", fun = "logcosh", alpha = 1,
+method = "C", row.norm = FALSE, maxit = 200,
+tol = 0.0001, verbose = TRUE)
+```
+
+```{r}
+cor(pmf_data, ica_sol$S, use = "pairwise.complete.obs")
+```
+
+It's difficult to assess without having a gold standards.
+
+```{r}
+qplot(timestamp,ica_sol$S[,2],geom="line")
+```
+
+```{r}
+library(NMF)
+pmf_r  <- nmf(imputed_ts_data, 11)
 ```
 
