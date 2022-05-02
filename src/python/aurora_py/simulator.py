@@ -33,3 +33,11 @@ class Simulator(ABC):
     @abstractmethod
     def name(self, simulator_name: SimulatorName):
         pass
+
+    @abstractmethod
+    def _is_correct_configuration(self):
+        pass
+
+    @abstractmethod
+    def _is_initialized(self):
+        pass

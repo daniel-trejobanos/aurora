@@ -32,11 +32,22 @@ class MockParameterAdapter(Parameters):
 class MockSimulator(Simulator):
 
     def __init__(self):
-        self._parameters = None
-        self._simulator_name = None
+        self._parameters: Parameters = None
+        self._simulator_name: SimulatorName = None
+
+    def _is_initialized(self):
+        return self._parameters is not None and \
+    self._simulator_name is not None
+
+    def _is_correct_configuration(self):
+        return self._is_initialized() and \
+               self._parameters.is_correct_target(self)
 
     def run(self):
-        return 1
+        if self._is_correct_configuration():
+            return 1
+        else:
+            return 0
 
     @property
     def parameters(self):
@@ -82,3 +93,13 @@ def test_is_correct_target(test_model_parameters, test_model_simulator,expected)
     mock_simulator = MockSimulator()
     mock_simulator.name = test_model_parameters
     assert mock_adapter.is_correct_target(mock_simulator) == expected
+
+
+@pytest.mark.parametrize("test_model_parameters, test_model_simulator, expected", model_combinations)
+def test_model_run(test_model_parameters, test_model_simulator,expected):
+    mock_adapter = MockParameterAdapter()
+    mock_adapter.target_simulator = test_model_simulator
+    mock_simulator = MockSimulator()
+    mock_simulator.name = test_model_parameters
+    mock_simulator.parameters = mock_adapter
+    assert expected == mock_simulator.run()
