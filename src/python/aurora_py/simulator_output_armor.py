@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from src.python.aurora_domain.emulator import Emulator
-from src.python.aurora_domain.simulator import Simulator
+from src.python.aurora_py.emulator import Emulator
+from src.python.aurora_py.simulator import Simulator
 
 
 class SimulatorOutputArmor:
