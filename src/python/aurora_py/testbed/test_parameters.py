@@ -12,13 +12,17 @@ class MockParameterAdapter(Parameters):
 
     @property
     def values(self):
+        if self._values is None:
+            raise ValueError("values is None")
         return self._values
 
     def is_correct_target(self, simulator: Simulator):
-        return self._target_simulator == simulator.name
+        return self.target_simulator == simulator.name
 
     @property
-    def target_simulator(self):
+    def target_simulator(self) -> SimulatorName:
+        if self._target_simulator is None:
+            raise ValueError("target_simulator is None")
         return self._target_simulator
 
     @target_simulator.setter
@@ -32,25 +36,27 @@ class MockParameterAdapter(Parameters):
 class MockSimulator(Simulator):
 
     def __init__(self):
-        self._parameters: Parameters = None
-        self._simulator_name: SimulatorName = None
+        self._parameters = None
+        self._simulator_name = None
 
-    def _is_initialized(self):
+    def _is_initialized(self) -> bool:
         return self._parameters is not None and \
-    self._simulator_name is not None
+               self._simulator_name is not None
 
-    def _is_correct_configuration(self):
+    def _is_correct_configuration(self) -> bool:
         return self._is_initialized() and \
                self._parameters.is_correct_target(self)
 
-    def run(self):
+    def run(self) -> int:
         if self._is_correct_configuration():
+            print("Model running")
             return 1
         else:
+            print("Simulator configuration error")
             return 0
 
     @property
-    def parameters(self):
+    def parameters(self) -> Parameters:
         return self._parameters
 
     @parameters.setter
@@ -58,7 +64,7 @@ class MockSimulator(Simulator):
         self._parameters = parameters
 
     @property
-    def name(self):
+    def name(self) -> SimulatorName:
         return self._simulator_name
 
     @name.setter
@@ -87,16 +93,16 @@ model_combinations = [(SimulatorName.CAMx65, SimulatorName.CAMx71, False),
 
 
 @pytest.mark.parametrize("test_model_parameters, test_model_simulator, expected", model_combinations)
-def test_is_correct_target(test_model_parameters, test_model_simulator,expected):
+def test_is_correct_target(test_model_parameters, test_model_simulator, expected):
     mock_adapter = MockParameterAdapter()
-    mock_adapter.target_simulator =  test_model_simulator
+    mock_adapter.target_simulator = test_model_simulator
     mock_simulator = MockSimulator()
     mock_simulator.name = test_model_parameters
     assert mock_adapter.is_correct_target(mock_simulator) == expected
 
 
 @pytest.mark.parametrize("test_model_parameters, test_model_simulator, expected", model_combinations)
-def test_model_run(test_model_parameters, test_model_simulator,expected):
+def test_simulator_run(test_model_parameters, test_model_simulator, expected):
     mock_adapter = MockParameterAdapter()
     mock_adapter.target_simulator = test_model_simulator
     mock_simulator = MockSimulator()
