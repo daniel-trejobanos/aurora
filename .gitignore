@@ -17,3 +17,11 @@ CAMx7.1/test_run_data/met
 CAMx7.1/test_run_data/outputs
 CAMx7.1/test_run_data/ptsrce
 renv
+
+# Renku
+.renku.lock
+.renku/tmp
+.renku/cache
+
+# JupyterLab
+.ipynb_checkpoints
