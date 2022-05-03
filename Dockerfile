@@ -14,7 +14,10 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     apt-utils \
-    vim
+    vim \
+    build-essential \
+   patchelf \
+   csh
  USER ${NB_USER}
 
 # Uncomment and adapt if you want to automatically install
