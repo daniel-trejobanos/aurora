@@ -6,4 +6,4 @@ echo "${AURORA_DIR}"
 docker run -it --name aurora \
     -v "${AURORA_DIR}":/usr/src/aurora \
     -w /usr/src/aurora/ \
-    aurora
+    aurora:no_renku
