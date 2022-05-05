@@ -238,4 +238,4 @@ dependencies:
     - werkzeug==2.1.1
     - widgetsnbextension==3.6.0
     - zipp==3.8.0
-prefix: /Users/Daniel/opt/anaconda3/envs/aurora
+prefix: /opt/conda
