@@ -9,13 +9,6 @@ CAMx6.5/test_run_data/inputs
 CAMx6.5/test_run_data/met
 CAMx6.5/test_run_data/outputs
 CAMx6.5/test_run_data/ptsrce
-CAMx7.1/build
-CAMx7.1/test_run_data/emiss
-CAMx7.1/test_run_data/icbc
-CAMx7.1/test_run_data/inputs
-CAMx7.1/test_run_data/met
-CAMx7.1/test_run_data/outputs
-CAMx7.1/test_run_data/ptsrce
 renv
 
 # Renku
