@@ -1,7 +1,23 @@
+# R
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+.Rprofile
+renv
+
+# Bash
+.bash_history
+
+# Pycharm
+.DS_Store
+.idea
+data/.DS_Store
+
+# Emacs
+.dir-locals.el
+
+# CAMX test run
 CAMx6.5/build
 CAMx6.5/test_run_data/emiss
 CAMx6.5/test_run_data/icbc
@@ -9,7 +25,6 @@ CAMx6.5/test_run_data/inputs
 CAMx6.5/test_run_data/met
 CAMx6.5/test_run_data/outputs
 CAMx6.5/test_run_data/ptsrce
-renv
 
 # Renku
 .renku.lock
