@@ -1,1 +1,4 @@
 data/observations/krakov.csv filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.itx filter=lfs diff=lfs merge=lfs -text
+data/pmf/krakov_pmf.csv filter=lfs diff=lfs merge=lfs -text
