@@ -1,4 +1,5 @@
 data/observations/krakov.csv filter=lfs diff=lfs merge=lfs -text
-*.h5 filter=lfs diff=lfs merge=lfs -text
-*.itx filter=lfs diff=lfs merge=lfs -text
+data/observations/Krakow_AMS_PMF_moz_data140422.h5 filter=lfs diff=lfs merge=lfs -text
+data/observations/KRK_input_10min.itx filter=lfs diff=lfs merge=lfs -text
+data/observatopms/KRK_species_10min filter=lfs diff=lfs merge=lfs -text
 data/pmf/krakov_pmf.csv filter=lfs diff=lfs merge=lfs -text
