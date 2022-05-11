@@ -15,7 +15,7 @@
                   "aurora",
                   {
                     "@renku_data_type": "renku.domain_model.dataset.Dataset",
-                    "@renku_oid": "96f8fadbe670c835dc77cc2574074394d1b28c825b6a76566016f3696bf46a12",
+                    "@renku_oid": "ed01430f6400c59886c175cb17d890b4e7a17efb3367fee67c5b83077a951587",
                     "@renku_reference": true
                   }
                 ]
