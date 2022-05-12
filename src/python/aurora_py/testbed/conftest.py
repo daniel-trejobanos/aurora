@@ -15,12 +15,14 @@ class MockItxFile:
     @property
     def contents(self):
         return self._contents
+
     @property
     def lines(self):
         return self._lines
+
     @property
     def waves(self):
-        return [((3,2),'Org_Specs')]
+        return [{"shape": (3, 2), "name": 'Org_Specs'}]
 
 
 @pytest.fixture()
