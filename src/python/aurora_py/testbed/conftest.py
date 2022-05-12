@@ -21,9 +21,16 @@ class MockItxFile:
         return self._lines
 
     @property
-    def waves(self):
+    def waves_shapes(self):
         return {'Org_Specs': (3, 2) }
 
+    @property
+    def waves_positions(self):
+        return {'Org_Specs': 1}
+
+    @property
+    def waves_names(self):
+        return ['Org_Specs']
 
 @pytest.fixture()
 def mock_itx_file():
