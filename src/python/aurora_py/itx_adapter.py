@@ -1,6 +1,6 @@
 from src.python.aurora_py.observations import Observations
 from ast import literal_eval
-
+import numpy as np
 
 def _split_wave_name(wave_name_string: str):
     dim_and_name = wave_name_string.split("=")[1]
@@ -80,6 +80,15 @@ class ItxAdapter(Observations):
             self._read_waves()
         return self._waves_names
 
+    def get_wave_data(self, wave_name:str) -> np.array:
+
+        wave_position = self.waves_positions[wave_name]
+        wave_shape = self.waves_shapes[wave_name]
+        # we skip the BEGIN line
+        wave_data_begin = wave_position + 2
+        nrows = wave_shape[0]
+        wave_data = np.loadtxt(self.contents[wave_data_begin: wave_data_begin + nrows])
+        return wave_data
 
     def wave_data(self, wave_name):
         pass

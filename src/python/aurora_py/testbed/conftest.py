@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 
@@ -31,6 +32,12 @@ class MockItxFile:
     @property
     def waves_names(self):
         return ['Org_Specs']
+
+    @property
+    def wave_data(self):
+        return np.array([[0.38642111, 0.16979307],
+                         [0.38642111, 0.16979307],
+                         [0.38642111, 0.16979307]])
 
 @pytest.fixture()
 def mock_itx_file():

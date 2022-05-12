@@ -1,3 +1,5 @@
+import numpy as np
+
 from src.python.aurora_py.itx_adapter import ItxAdapter
 
 
@@ -23,3 +25,10 @@ def test_read_wave_names(mock_itx_file):
     file_contents = mock_itx_file.contents
     itx_adapter = ItxAdapter(file_contents)
     assert mock_itx_file.waves_names == itx_adapter.waves_names
+
+
+def test_read_wave_data(mock_itx_file):
+    file_contents = mock_itx_file.contents
+    itx_adapter = ItxAdapter(file_contents)
+    first_wave = mock_itx_file.waves_names[0]
+    np.testing.assert_array_equal( mock_itx_file.wave_data, itx_adapter.get_wave_data(first_wave))
