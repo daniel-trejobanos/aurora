@@ -5,7 +5,7 @@ from ast import literal_eval
 def _split_wave_name(wave_name_string: str):
     dim_and_name = wave_name_string.split("=")[1]
     wave_dim, wave_name = dim_and_name.split("\t")
-    return {"shape": literal_eval(wave_dim), "name": wave_name}
+    return (wave_name, literal_eval(wave_dim)  )
 
 
 class ItxAdapter(Observations):
@@ -13,7 +13,7 @@ class ItxAdapter(Observations):
     def __init__(self, file_contents):
         self._lines = None
         self._contents = None
-        self._waves = None
+        self._waves_shapes = None
         self._read_file_contents(file_contents)
 
     def get_times(self):
@@ -38,8 +38,8 @@ class ItxAdapter(Observations):
         self._lines = len(self._contents)
 
     def _read_waves(self):
-        wave_strings = [line for line in self._contents if "WAVES/N=" in line]
-        self._waves = [_split_wave_name(wave) for wave in wave_strings]
+        wave_strings = [(idx, line) for idx,line in enumerate(self._contents) if "WAVES/N=" in line]
+        self._waves_shapes = dict([_split_wave_name(wave) for idx, wave in wave_strings])
 
     @property
     def lines(self) -> int:
@@ -50,7 +50,10 @@ class ItxAdapter(Observations):
         return self._contents
 
     @property
-    def waves(self) -> list[dict[tuple, str]]:
-        if self._waves is None:
+    def waves_shapes(self) -> list[dict[tuple, str]]:
+        if self._waves_shapes is None:
             self._read_waves()
-        return self._waves
+        return self._waves_shapes
+
+    def wave_data(self, wave_name):
+        pass

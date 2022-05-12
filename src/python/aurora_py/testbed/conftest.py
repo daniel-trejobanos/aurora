@@ -22,7 +22,7 @@ class MockItxFile:
 
     @property
     def waves(self):
-        return [{"shape": (3, 2), "name": 'Org_Specs'}]
+        return {'Org_Specs': (3, 2) }
 
 
 @pytest.fixture()
