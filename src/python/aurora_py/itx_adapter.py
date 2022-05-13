@@ -2,10 +2,25 @@ from src.python.aurora_py.observations import Observations
 from ast import literal_eval
 import numpy as np
 
-def _split_wave_name(wave_name_string: str):
-    dim_and_name = wave_name_string.split("=")[1]
-    wave_dim, wave_name = dim_and_name.split("\t")
-    return (wave_name, literal_eval(wave_dim)  )
+def split_wave_name(wave_name_string: str):
+    output_tuple = (None, None)
+    if "/N" in wave_name_string:
+        output_tuple = split_multidimensional_wave_name(wave_name_string)
+    else:
+        output_tuple = (None, None) # split_multiple_waves(wave_name_string)
+    return output_tuple
+
+def split_multidimensional_wave_name(wave_name_string: str):
+    shape_string = wave_name_string.split("=")[1].split('\t')[0]
+    shape_tuple = literal_eval(shape_string)
+    wave_name = wave_name_string.split("=")[1].split('\t')[1]
+    return (wave_name, shape_tuple)
+
+def split_multiple_wave_name(wave_name_string:str):
+    number_of_waves = len(wave_name_string.split('\t')) - 1
+    shape_tuple = (None, number_of_waves)
+    wave_name_tuple = tuple(wave_name_string.split('\t')[1:])
+    return (wave_name_tuple, shape_tuple)
 
 
 class ItxAdapter(Observations):
@@ -34,7 +49,7 @@ class ItxAdapter(Observations):
         pass
 
     def _read_file_contents(self, contents: str):
-        self._contents = contents.split('\r')
+        self._contents = contents.split('\n')
         if self._contents[-1] == '':
             self._contents = self._contents[:-1]
         self._lines = len(self._contents)
@@ -46,9 +61,10 @@ class ItxAdapter(Observations):
         :return:
         """
         # read the special start of wave line
-        wave_strings = [(idx, line) for idx,line in enumerate(self._contents) if "WAVES/N=" in line]
+        wave_strings = [(idx, line) for idx,line in enumerate(self._contents) if "WAVES" in line]
         # store the wave shapes in a dictionary with wave name as key
-        self._waves_shapes:dict = dict([_split_wave_name(wave) for idx, wave in wave_strings])
+        self._waves_shapes:dict = dict([split_wave_name(wave) for idx, wave in wave_strings ])
+
         # store the wave starting position in a dictionary with wave name as key
         self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx,_ in wave_strings]))
         # add the wave names as a different property for completeness
