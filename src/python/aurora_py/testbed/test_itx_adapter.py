@@ -5,13 +5,15 @@ from src.python.aurora_py.itx_adapter import ItxAdapter, split_multiple_wave_nam
 
 
 def test_split_multidimensional_wave_name():
-    expected_tuple = ("Org_Specs", (2,3))
+    expected_tuple = ("Org_Specs", (2, 3))
     assert split_multidimensional_wave_name("WAVES/N=(2,3)\tOrg_Specs") == expected_tuple
 
+
 def test_split_multiple_wave_name():
-    expected_tuple = (("acsm_utc_time","SO4","NO3","NH4","Chl"), (None,5))
+    expected_tuple = (("acsm_utc_time", "SO4", "NO3", "NH4", "Chl"), (None, 5))
     result_tuple = split_multiple_wave_name("WAVES/D\tacsm_utc_time\tSO4\tNO3\tNH4\tChl")
     assert result_tuple == expected_tuple
+
 
 def test_read_dim(mock_itx_file):
     file_contents = mock_itx_file.contents
@@ -46,6 +48,7 @@ def test_read_wave_data(mock_itx_file):
     second_wave = mock_itx_file.waves_names[1]
     np.testing.assert_array_equal(expected_data[second_wave], itx_adapter.get_wave_data(second_wave))
 
+
 def test_get_times(mock_itx_file):
     file_contents = mock_itx_file.contents
     itx_adapter = ItxAdapter(file_contents)
@@ -54,19 +57,21 @@ def test_get_times(mock_itx_file):
     np.testing.assert_array_equal(first_wave, adapter_times)
 
 
-
+@pytest.mark.xfail
 def test_get_amus():
     assert False
 
 
+@pytest.mark.xfail
 def test_get_data():
     assert False
 
 
+@pytest.mark.xfail
 def test_get_location():
     assert False
 
 
+@pytest.mark.xfail
 def test_get_features():
     assert False
-
