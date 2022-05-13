@@ -34,7 +34,8 @@ def test_read_wave_position(mock_itx_file):
 def test_read_wave_names(mock_itx_file):
     file_contents = mock_itx_file.contents
     itx_adapter = ItxAdapter(file_contents)
-    assert mock_itx_file.waves_names == itx_adapter.waves_names
+    assert itx_adapter.waves_names == mock_itx_file.waves_names
+
 
 def test_read_wave_data(mock_itx_file):
     file_contents = mock_itx_file.contents
@@ -46,9 +47,3 @@ def test_read_wave_data(mock_itx_file):
     np.testing.assert_array_equal(expected_data[second_wave], itx_adapter.get_wave_data(second_wave))
 
 
-# TODO test for a true itx file
-@pytest.mark.xfail
-def test_read_wave_from_file():
-    with open("../../../../data/observations/KRK_species_10min.itx", "r") as file:
-        itx_adapter = ItxAdapter(file.read())
-    assert False

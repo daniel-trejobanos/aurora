@@ -25,7 +25,7 @@ class MockItxFile:
                          [0.38642111, 0.16979307],
                          [0.38642111, 0.16979307]])
         second_wave_data = np.array([0.38642111,0.38642111,0.38642111])
-        self._wave_data = {'Org_Specs': first_wave_data, ('utc_time',):second_wave_data}
+        self._wave_data = {'Org_Specs': first_wave_data, 'utc_time':second_wave_data}
 
     @property
     def contents(self):
@@ -37,15 +37,15 @@ class MockItxFile:
 
     @property
     def waves_shapes(self):
-        return {'Org_Specs': (3, 2), ('utc_time',):(3,1) }
+        return {'Org_Specs': (3, 2), 'utc_time':(3,1) }
 
     @property
     def waves_positions(self):
-        return {'Org_Specs': 1, ('utc_time',): 7 }
+        return {'Org_Specs': 1, 'utc_time': 7 }
 
     @property
     def waves_names(self):
-        return ['Org_Specs',('utc_time',)]
+        return ['Org_Specs', 'utc_time']
 
     @property
     def wave_data(self):

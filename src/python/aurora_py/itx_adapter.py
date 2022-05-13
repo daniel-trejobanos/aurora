@@ -1,6 +1,6 @@
 from src.python.aurora_py.observations import Observations
 from ast import literal_eval
-import numpy as np
+from src.python.aurora_py.config.py import Configuration
 
 def split_wave_name(wave_name_string: str):
     output_tuple = (None, None)
@@ -20,18 +20,25 @@ def split_multiple_wave_name(wave_name_string:str):
     number_of_waves = len(wave_name_string.split('\t')) - 1
     shape_tuple = (None, number_of_waves)
     wave_name_tuple = tuple(wave_name_string.split('\t')[1:])
+    if len(wave_name_tuple) == 1:
+        wave_name_tuple = wave_name_tuple[0]
     return (wave_name_tuple, shape_tuple)
 
 
 class ItxAdapter(Observations):
 
     def __init__(self, file_contents):
+        """
+        Reads the string with the contents of a IGOR Pro Format
+        :param file_contents: string in IGOR PRO format
+        """
         self._waves_names = None
         self._lines = None
         self._contents = None
         self._waves_shapes = None
         self._waves_positions = None
         self._read_file_contents(file_contents)
+        self._config = Configuration()
 
     def get_times(self):
         pass
@@ -49,6 +56,10 @@ class ItxAdapter(Observations):
         pass
 
     def _read_file_contents(self, contents: str):
+        """
+        Reads a string (contents of an itx file) and  computes the number of lines
+        :param contents: string in Igor Pro format
+        """
         self._contents = contents.split('\n')
         if self._contents[-1] == '':
             self._contents = self._contents[:-1]
@@ -68,7 +79,7 @@ class ItxAdapter(Observations):
         self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx,_ in wave_strings]))
         # use BEGIN and END keywords to deduce the number of rows in the wave (when its not marked as N)
         for wave_name, wave_position in self._waves_positions.items():
-            if type(wave_name) == tuple:
+            if self._waves_shapes[wave_name][0] is None:
                 sublist = self._contents[(wave_position + 2):]
                 offset = 0
                 for idx, string in enumerate(sublist):
@@ -81,10 +92,18 @@ class ItxAdapter(Observations):
 
     @property
     def lines(self) -> int:
+        """
+        The number lines on the original string
+        :return: integer with the number of lines in the IGOR PRO file
+        """
         return self._lines
 
     @property
     def contents(self) -> str:
+        """
+        The string in IGOR PRO format
+        :return:
+        """
         return self._contents
 
     @property
@@ -98,7 +117,7 @@ class ItxAdapter(Observations):
         if self._waves_positions is None:
             self._read_waves()
         return self._waves_positions
-    
+
     @property
     def waves_names(self) -> list[str]:
         if self._waves_names is None:
