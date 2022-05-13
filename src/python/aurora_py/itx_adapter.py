@@ -7,7 +7,7 @@ def split_wave_name(wave_name_string: str):
     if "/N" in wave_name_string:
         output_tuple = split_multidimensional_wave_name(wave_name_string)
     else:
-        output_tuple = (None, None) # split_multiple_waves(wave_name_string)
+        output_tuple = split_multiple_wave_name(wave_name_string)
     return output_tuple
 
 def split_multidimensional_wave_name(wave_name_string: str):
@@ -64,9 +64,18 @@ class ItxAdapter(Observations):
         wave_strings = [(idx, line) for idx,line in enumerate(self._contents) if "WAVES" in line]
         # store the wave shapes in a dictionary with wave name as key
         self._waves_shapes:dict = dict([split_wave_name(wave) for idx, wave in wave_strings ])
-
         # store the wave starting position in a dictionary with wave name as key
         self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx,_ in wave_strings]))
+        # use BEGIN and END keywords to deduce the number of rows in the wave (when its not marked as N)
+        for wave_name, wave_position in self._waves_positions.items():
+            if type(wave_name) == tuple:
+                sublist = self._contents[(wave_position + 2):]
+                offset = 0
+                for idx, string in enumerate(sublist):
+                    offset=idx
+                    if "END" in string:
+                        break
+                self.waves_shapes[wave_name] = (offset, self._waves_shapes[wave_name][1])
         # add the wave names as a different property for completeness
         self._waves_names = list(self._waves_positions.keys())
 
