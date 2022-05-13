@@ -1,6 +1,7 @@
 from src.python.aurora_py.observations import Observations
 from ast import literal_eval
-from src.python.aurora_py.config.py import Configuration
+from src.python.aurora_py.config.config import AuroraConfiguration
+import numpy as np
 
 def split_wave_name(wave_name_string: str):
     output_tuple = (None, None)
@@ -10,13 +11,15 @@ def split_wave_name(wave_name_string: str):
         output_tuple = split_multiple_wave_name(wave_name_string)
     return output_tuple
 
+
 def split_multidimensional_wave_name(wave_name_string: str):
     shape_string = wave_name_string.split("=")[1].split('\t')[0]
     shape_tuple = literal_eval(shape_string)
     wave_name = wave_name_string.split("=")[1].split('\t')[1]
     return (wave_name, shape_tuple)
 
-def split_multiple_wave_name(wave_name_string:str):
+
+def split_multiple_wave_name(wave_name_string: str):
     number_of_waves = len(wave_name_string.split('\t')) - 1
     shape_tuple = (None, number_of_waves)
     wave_name_tuple = tuple(wave_name_string.split('\t')[1:])
@@ -38,10 +41,10 @@ class ItxAdapter(Observations):
         self._waves_shapes = None
         self._waves_positions = None
         self._read_file_contents(file_contents)
-        self._config = Configuration()
+        self._config = AuroraConfiguration()
 
     def get_times(self):
-        pass
+        return self.get_wave_data(self._config.observations["time"])
 
     def get_amus(self):
         pass
@@ -72,18 +75,18 @@ class ItxAdapter(Observations):
         :return:
         """
         # read the special start of wave line
-        wave_strings = [(idx, line) for idx,line in enumerate(self._contents) if "WAVES" in line]
+        wave_strings = [(idx, line) for idx, line in enumerate(self._contents) if "WAVES" in line]
         # store the wave shapes in a dictionary with wave name as key
-        self._waves_shapes:dict = dict([split_wave_name(wave) for idx, wave in wave_strings ])
+        self._waves_shapes: dict = dict([split_wave_name(wave) for idx, wave in wave_strings])
         # store the wave starting position in a dictionary with wave name as key
-        self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx,_ in wave_strings]))
+        self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx, _ in wave_strings]))
         # use BEGIN and END keywords to deduce the number of rows in the wave (when its not marked as N)
         for wave_name, wave_position in self._waves_positions.items():
             if self._waves_shapes[wave_name][0] is None:
                 sublist = self._contents[(wave_position + 2):]
                 offset = 0
                 for idx, string in enumerate(sublist):
-                    offset=idx
+                    offset = idx
                     if "END" in string:
                         break
                 self.waves_shapes[wave_name] = (offset, self._waves_shapes[wave_name][1])
@@ -124,7 +127,7 @@ class ItxAdapter(Observations):
             self._read_waves()
         return self._waves_names
 
-    def get_wave_data(self, wave_name:str) -> np.array:
+    def get_wave_data(self, wave_name: str) -> np.array:
 
         wave_position = self.waves_positions[wave_name]
         wave_shape = self.waves_shapes[wave_name]
