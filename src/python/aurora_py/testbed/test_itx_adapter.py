@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 import pytest
 
@@ -52,9 +54,9 @@ def test_read_wave_data(mock_itx_file):
 def test_get_times(mock_itx_file):
     file_contents = mock_itx_file.contents
     itx_adapter = ItxAdapter(file_contents)
-    first_wave = mock_itx_file.wave_data['acsm_utc_time']
-    adapter_times = itx_adapter.get_times()
-    np.testing.assert_array_equal(first_wave, adapter_times)
+    wave_times = mock_itx_file.times
+    adapter_times: np.array = itx_adapter.get_times()
+    np.testing.assert_array_equal(wave_times, adapter_times)
 
 
 @pytest.mark.xfail

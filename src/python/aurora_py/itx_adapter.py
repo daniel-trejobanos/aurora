@@ -2,6 +2,8 @@ from src.python.aurora_py.observations import Observations
 from ast import literal_eval
 from src.python.aurora_py.config.config import AuroraConfiguration
 import numpy as np
+import datetime as dt
+
 
 def split_wave_name(wave_name_string: str):
     output_tuple = (None, None)
@@ -43,8 +45,14 @@ class ItxAdapter(Observations):
         self._read_file_contents(file_contents)
         self._config = AuroraConfiguration()
 
-    def get_times(self):
-        return self.get_wave_data(self._config.observations["time"])
+    def get_times(self) -> np.array:
+        """
+        returns the vector of timestamps in utc format
+        :return:
+        """
+        time_wave = self.get_wave_data(self._config.observations["time"])
+        utc_times = self._to_utc_time(time_wave)
+        return utc_times
 
     def get_amus(self):
         pass
@@ -137,5 +145,12 @@ class ItxAdapter(Observations):
         wave_data = np.loadtxt(self.contents[wave_data_begin: wave_data_begin + nrows])
         return wave_data
 
-    def wave_data(self, wave_name):
-        pass
+    @staticmethod
+    def _to_utc_time(time_wave: np.array):
+        """
+        Converts an array of integers (timestamps) to utc time, given that itx uses the mac epoch.
+        :param time: array of timestamps (np array)
+        """
+        mac_epoch = np.datetime64('1904-01-01')
+        time_wave_delta = np.vectorize(lambda x: np.timedelta64(x,'s'))(time_wave.astype(int))
+        return time_wave_delta + mac_epoch

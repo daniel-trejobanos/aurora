@@ -14,9 +14,9 @@ class MockItxFile:
         first_wave = first_line + second_line + third_line + data_lines + end_line
         second_line = 'WAVES/D\tacsm_utc_time\n'
         third_line = 'BEGIN\n'
-        data_lines = '\t0.38642111\n' \
-                     '\t0.38642111\n' \
-                     '\t0.38642111\n'
+        data_lines = '\t3598270200.0\n' \
+                     '\t3598270201.0\n' \
+                     '\t3598270202.0\n'
         end_line = 'END\n'
         second_wave = second_line + third_line + data_lines + end_line
         self._contents = first_wave + second_wave
@@ -24,7 +24,7 @@ class MockItxFile:
         first_wave_data = np.array([[0.38642111, 0.16979307],
                          [0.38642111, 0.16979307],
                          [0.38642111, 0.16979307]])
-        second_wave_data = np.array([0.38642111,0.38642111,0.38642111])
+        second_wave_data = np.array([3598270200.0, 3598270201.0, 3598270202.0])
         self._wave_data = {'Org_Specs': first_wave_data, 'acsm_utc_time':second_wave_data}
 
     @property
@@ -50,6 +50,11 @@ class MockItxFile:
     @property
     def wave_data(self):
         return self._wave_data
+
+    @property
+    def times(self):
+        return np.array(['2018-01-08T15:30:00', '2018-01-08T15:30:01',
+               '2018-01-08T15:30:02'], dtype='datetime64[s]')
 
 
 @pytest.fixture()
