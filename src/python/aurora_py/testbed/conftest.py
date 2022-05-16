@@ -69,6 +69,10 @@ class MockItxFile:
     def amus(self):
         return self._wave_data['amus']
 
+    @property
+    def data(self):
+        return self._wave_data['Org_Specs']
+
 
 @pytest.fixture()
 def mock_itx_file():

@@ -67,10 +67,12 @@ def test_get_amus(mock_itx_file):
     np.testing.assert_array_equal(wave_amus, adapter_amus)
 
 
-@pytest.mark.xfail
-def test_get_data():
-    assert False
-
+def test_get_data(mock_itx_file):
+    file_contents = mock_itx_file.contents
+    itx_adapter = ItxAdapter(file_contents)
+    wave_data = mock_itx_file.data
+    adapter_data = itx_adapter.get_data()
+    np.testing.assert_array_equal(wave_data, adapter_data)
 
 @pytest.mark.xfail
 def test_get_location():
