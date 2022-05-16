@@ -55,10 +55,10 @@ class ItxAdapter(Observations):
         return utc_times
 
     def get_amus(self):
-        pass
+        return self.get_wave_data(self._config.observations["amus"])
 
     def get_data(self):
-        pass
+        return self.get_wave_data(self._config.observations["data"])
 
     def get_location(self):
         pass
