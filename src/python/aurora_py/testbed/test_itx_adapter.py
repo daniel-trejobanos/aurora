@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
 import pytest
 
 from src.python.aurora_py.itx_adapter import ItxAdapter, split_multiple_wave_name, split_multidimensional_wave_name
@@ -73,6 +74,15 @@ def test_get_data(mock_itx_file):
     wave_data = mock_itx_file.data
     adapter_data = itx_adapter.get_data()
     np.testing.assert_array_equal(wave_data, adapter_data)
+
+
+def test_to_pandas(mock_itx_file):
+    file_contents = mock_itx_file.contents
+    itx_adapter = ItxAdapter(file_contents)
+    itx_df = mock_itx_file.df
+    adapter_df = itx_adapter.to_pandas()
+    pd.testing.assert_frame_equal(adapter_df, itx_df)
+
 
 @pytest.mark.xfail
 def test_get_location():

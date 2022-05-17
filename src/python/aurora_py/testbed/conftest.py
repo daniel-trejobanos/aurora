@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 
 
@@ -73,6 +74,11 @@ class MockItxFile:
     def data(self):
         return self._wave_data['Org_Specs']
 
+    @property
+    def df(self):
+        return pd.DataFrame(data=self.data,
+                            columns=self.amus,
+                            index=self.times)
 
 @pytest.fixture()
 def mock_itx_file():

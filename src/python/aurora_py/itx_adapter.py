@@ -1,12 +1,12 @@
+import pandas as pd
+
 from src.python.aurora_py.observations import Observations
 from ast import literal_eval
 from src.python.aurora_py.config.config import AuroraConfiguration
 import numpy as np
-import datetime as dt
 
 
 def split_wave_name(wave_name_string: str):
-    output_tuple = (None, None)
     if "/N" in wave_name_string:
         output_tuple = split_multidimensional_wave_name(wave_name_string)
     else:
@@ -18,16 +18,18 @@ def split_multidimensional_wave_name(wave_name_string: str):
     shape_string = wave_name_string.split("=")[1].split('\t')[0]
     shape_tuple = literal_eval(shape_string)
     wave_name = wave_name_string.split("=")[1].split('\t')[1]
-    return (wave_name, shape_tuple)
+    return wave_name, shape_tuple
 
 
 def split_multiple_wave_name(wave_name_string: str):
     number_of_waves = len(wave_name_string.split('\t')) - 1
     shape_tuple = (None, number_of_waves)
-    wave_name_tuple = tuple(wave_name_string.split('\t')[1:])
+    wave_name_tuple: tuple[str, ...] = tuple(wave_name_string.split('\t')[1:])
     if len(wave_name_tuple) == 1:
-        wave_name_tuple = wave_name_tuple[0]
-    return (wave_name_tuple, shape_tuple)
+        wave_name_string = wave_name_tuple[0]
+        return wave_name_string, shape_tuple
+    else:
+        return wave_name_tuple, shape_tuple
 
 
 class ItxAdapter(Observations):
@@ -149,8 +151,12 @@ class ItxAdapter(Observations):
     def _to_utc_time(time_wave: np.array):
         """
         Converts an array of integers (timestamps) to utc time, given that itx uses the mac epoch.
-        :param time: array of timestamps (np array)
+        :param time_wave: array of timestamps (np array)
         """
         mac_epoch = np.datetime64('1904-01-01')
-        time_wave_delta = np.vectorize(lambda x: np.timedelta64(x,'s'))(time_wave.astype(int))
+        time_wave_delta = np.vectorize(lambda x: np.timedelta64(x, 's'))(time_wave.astype(int))
         return time_wave_delta + mac_epoch
+
+    def to_pandas(self) -> pd.DataFrame:
+        return pd.DataFrame(columns=self.get_amus(),
+                            data=self.get_data(), index=self.get_times())
