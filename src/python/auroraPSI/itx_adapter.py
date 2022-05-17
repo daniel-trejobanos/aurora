@@ -1,8 +1,8 @@
 import pandas as pd
 
-from src.python.auroraPSI.observations import Observations
+from auroraPSI.observations import Observations
 from ast import literal_eval
-from src.python.auroraPSI.config.config import AuroraConfiguration
+from auroraPSI.config.config import AuroraConfiguration
 import numpy as np
 
 
