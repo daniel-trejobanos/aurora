@@ -62,6 +62,9 @@ class ItxAdapter(Observations):
     def get_data(self):
         return self.get_wave_data(self._config.observations["data"])
 
+    def get_errors(self):
+        return self.get_wave_data(self._config.observations["error"])
+
     def get_location(self):
         pass
 

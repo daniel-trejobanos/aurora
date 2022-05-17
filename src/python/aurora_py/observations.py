@@ -19,6 +19,10 @@ class Observations(ABC):
         pass
 
     @abstractmethod
+    def get_errors(self):
+        pass
+
+    @abstractmethod
     def get_location(self):
         pass
 
