@@ -37,7 +37,7 @@ RUN /opt/conda/bin/pip install -r /tmp/requirements.txt && \
     conda clean -y --all && \
     conda env export -n "root"
 COPY src/ /tmp/src
-RUN  pip install /tmp/src/python/auroraPSI
+RUN  pip install /tmp/src/python/
 # RENKU_VERSION determines the version of the renku CLI
 # that will be used in this image. To find the latest version,
 # visit https://pypi.org/project/renku/#history.
