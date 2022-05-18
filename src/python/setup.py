@@ -8,5 +8,6 @@ setup(
     license='',
     author='Daniel Trejo Banos',
     author_email='',
-    description=''
+    description='',
+    include_package_data = True
 )
