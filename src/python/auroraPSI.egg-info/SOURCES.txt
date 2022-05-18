@@ -1,0 +1,17 @@
+setup.py
+auroraPSI/__init__.py
+auroraPSI/emulator.py
+auroraPSI/itx_adapter.py
+auroraPSI/observation_plotter.py
+auroraPSI/observations.py
+auroraPSI/pandas_plotter_adapter.py
+auroraPSI/parameters.py
+auroraPSI/simulator.py
+auroraPSI/simulator_output_armor.py
+auroraPSI/source_input.py
+auroraPSI/sources.py
+auroraPSI/validation.py
+auroraPSI.egg-info/PKG-INFO
+auroraPSI.egg-info/SOURCES.txt
+auroraPSI.egg-info/dependency_links.txt
+auroraPSI.egg-info/top_level.txt
