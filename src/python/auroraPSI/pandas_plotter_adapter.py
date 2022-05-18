@@ -24,9 +24,8 @@ class PlotterAdapter(ObservationPlotter):
         self._df.plot()
         plt.legend(bbox_to_anchor=(1.04, 1.2), loc="upper left")
 
-
     def __init__(self, observation_df: pd.DataFrame):
-        self._df = observation_df
+        self._df = observation_df.copy()
         cf.go_offline()
 
         self._scatter_plot = self._init_scatter_plot()
@@ -77,3 +76,15 @@ class PlotterAdapter(ObservationPlotter):
                                    theme=theme, colorscale=colorscale)
 
         return _histogram_plot
+
+    @property
+    def data_frame(self):
+        return self._df
+
+    @data_frame.setter
+    def data_frame(self, observation_df: pd.DataFrame):
+        self._df = observation_df.copy()
+        cf.go_offline()
+        self._scatter_plot = self._init_scatter_plot()
+        self._date_plot = self._init_date_plot()
+        self._histogram_plot = self._init_histogram_plot()
