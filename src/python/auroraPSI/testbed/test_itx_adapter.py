@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 from auroraPSI.itx_adapter import ItxAdapter, split_multiple_wave_name, split_multidimensional_wave_name
+from auroraPSI.validation import ValidationError
 
 
 def test_split_multidimensional_wave_name():
@@ -82,6 +83,12 @@ def test_to_pandas(mock_itx_file):
     itx_df = mock_itx_file.df
     adapter_df = itx_adapter.to_pandas()
     pd.testing.assert_frame_equal(adapter_df, itx_df)
+
+
+@pytest.mark.parametrize("test_contents", ['', 'abaca', 'abaca\rabaca'])
+def test_file_contents_validation(test_contents):
+    with pytest.raises(ValidationError):
+        itx_adapter = ItxAdapter(test_contents)
 
 
 @pytest.mark.xfail

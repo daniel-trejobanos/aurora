@@ -3,8 +3,10 @@ import pandas as pd
 from auroraPSI.observations import Observations
 from ast import literal_eval
 from auroraPSI.config.config import AuroraConfiguration
+from auroraPSI.validation import require_not_empty
+from auroraPSI.validation import ValidationError
 import numpy as np
-
+import logging
 
 def split_wave_name(wave_name_string: str):
     if "/N" in wave_name_string:
@@ -39,6 +41,8 @@ class ItxAdapter(Observations):
         Reads the string with the contents of a IGOR Pro Format
         :param file_contents: string in IGOR PRO format
         """
+        self.logger = logging.getLogger('auroraPSI')
+        self._waves_in_line = None
         self._waves_names = None
         self._lines = None
         self._contents = None
@@ -46,6 +50,7 @@ class ItxAdapter(Observations):
         self._waves_positions = None
         self._read_file_contents(file_contents)
         self._config = AuroraConfiguration()
+
 
     def get_times(self) -> np.array:
         """
@@ -76,10 +81,18 @@ class ItxAdapter(Observations):
         Reads a string (contents of an itx file) and  computes the number of lines
         :param contents: string in Igor Pro format
         """
+        require_not_empty(contents)
         self._contents = contents.split('\n')
         if self._contents[-1] == '':
             self._contents = self._contents[:-1]
         self._lines = len(self._contents)
+        self._waves_in_line = [(idx, line) for idx, line in enumerate(self._contents) if "WAVES" in line]
+        try:
+            # read the special start of wave line
+            require_not_empty(self._waves_in_line)
+        except ValidationError as val:
+            self.logger.exception("There are no waves in the itx file")
+            raise val
 
     def _read_waves(self):
         """
@@ -87,12 +100,10 @@ class ItxAdapter(Observations):
         It will store the wave shape in a dictionary and the wave starting position in another.
         :return:
         """
-        # read the special start of wave line
-        wave_strings = [(idx, line) for idx, line in enumerate(self._contents) if "WAVES" in line]
         # store the wave shapes in a dictionary with wave name as key
-        self._waves_shapes: dict = dict([split_wave_name(wave) for idx, wave in wave_strings])
+        self._waves_shapes: dict = dict([split_wave_name(wave) for idx, wave in self._waves_in_line])
         # store the wave starting position in a dictionary with wave name as key
-        self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx, _ in wave_strings]))
+        self._waves_positions = dict(zip(self.waves_shapes.keys(), [idx for idx, _ in self._waves_in_line]))
         # use BEGIN and END keywords to deduce the number of rows in the wave (when its not marked as N)
         for wave_name, wave_position in self._waves_positions.items():
             if self._waves_shapes[wave_name][0] is None:
