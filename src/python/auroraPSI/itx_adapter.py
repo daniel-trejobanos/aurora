@@ -8,6 +8,7 @@ from auroraPSI.validation import ValidationError
 import numpy as np
 import logging
 
+
 def split_wave_name(wave_name_string: str):
     if "/N" in wave_name_string:
         output_tuple = split_multidimensional_wave_name(wave_name_string)
@@ -51,14 +52,13 @@ class ItxAdapter(Observations):
         self._read_file_contents(file_contents)
         self._config = AuroraConfiguration()
 
-
     def get_times(self) -> np.array:
         """
         returns the vector of timestamps in utc format
         :return:
         """
         time_wave = self.get_wave_data(self._config.observations["time"])
-        utc_times = self._to_utc_time(time_wave)
+        utc_times = self.to_utc_time(time_wave)
         return utc_times
 
     def get_amus(self):
@@ -162,7 +162,7 @@ class ItxAdapter(Observations):
         return wave_data
 
     @staticmethod
-    def _to_utc_time(time_wave: np.array):
+    def to_utc_time(time_wave: np.array):
         """
         Converts an array of integers (timestamps) to utc time, given that itx uses the mac epoch.
         :param time_wave: array of timestamps (np array)
@@ -174,3 +174,8 @@ class ItxAdapter(Observations):
     def to_pandas(self) -> pd.DataFrame:
         return pd.DataFrame(columns=self.get_amus(),
                             data=self.get_data(), index=self.get_times())
+
+    @classmethod
+    def read_file(cls, file_path: str):
+        with open(file_path, "r") as file:
+            return cls(file.read())
