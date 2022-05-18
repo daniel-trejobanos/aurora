@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(
     name='auroraPSI',
     version='',
-    packages=['auroraPSI'],
+    packages=find_packages(),
     url='',
     license='',
     author='Daniel Trejo Banos',
