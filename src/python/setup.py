@@ -1,4 +1,4 @@
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup(
     name='auroraPSI',
@@ -9,5 +9,5 @@ setup(
     author='Daniel Trejo Banos',
     author_email='',
     description='',
-    include_package_data = True
+    include_package_data=True
 )
