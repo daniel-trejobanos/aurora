@@ -171,9 +171,16 @@ class ItxAdapter(Observations):
         time_wave_delta = np.vectorize(lambda x: np.timedelta64(x, 's'))(time_wave.astype(int))
         return time_wave_delta + mac_epoch
 
-    def to_pandas(self) -> pd.DataFrame:
-        return pd.DataFrame(columns=self.get_amus(),
-                            data=self.get_data(), index=self.get_times())
+    def to_pandas(self) -> dict[str, pd.DataFrame]:
+        data_columns = [str(amu) for amu in self.get_amus()]
+        data_df = pd.DataFrame(columns=data_columns,
+                               data=self.get_data(), index=self.get_times())
+
+        error_columns = [column + "_err" for column in data_columns]
+        error_df = pd.DataFrame(columns=error_columns,
+                                data=self.get_errors(),
+                                index=self.get_times())
+        return {"data": data_df, "errors": error_df}
 
     @classmethod
     def read_file(cls, file_path: str):

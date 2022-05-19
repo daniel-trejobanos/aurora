@@ -6,7 +6,7 @@ def test_configuration_observations():
         "time": "acsm_utc_time",
         "amus": "amus",
         "data": "Org_Specs",
-        "error": "Org_Specs_err"
+        "error": "OrgSpecs_err"
     }
     local_configuration = AuroraConfiguration()
     assert local_configuration.observations == expected_dictionary

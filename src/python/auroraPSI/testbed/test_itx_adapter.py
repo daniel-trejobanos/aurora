@@ -75,11 +75,19 @@ def test_get_data(mock_itx_file):
     np.testing.assert_array_equal(wave_data, adapter_data)
 
 
+@pytest.mark.xfail
+def test_get_error(mock_itx_file):
+    assert False
+
+
+# TODO manage case where there is no data, and also add an error data frame
+@pytest.mark.xfail
 def test_to_pandas(mock_itx_file):
     file_contents = mock_itx_file.contents
     itx_adapter = ItxAdapter(file_contents)
     itx_df = mock_itx_file.df
-    adapter_df = itx_adapter.to_pandas()
+    adapter_dict = itx_adapter.to_pandas()
+    adapter_df = adapter_dict['data']
     pd.testing.assert_frame_equal(adapter_df, itx_df)
 
 

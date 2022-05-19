@@ -21,7 +21,14 @@ class PlotterAdapter(ObservationPlotter):
         ipython = get_ipython()
         ipython.magic("matplotlib widget")
         plt.style.use("seaborn-whitegrid")
-        self._df.plot()
+        self._df[self._amus].plot()
+        plt.legend(bbox_to_anchor=(1.04, 1.2), loc="upper left")
+
+    def all_error_plot(self):
+        ipython = get_ipython()
+        ipython.magic("matplotlib widget")
+        plt.style.use("seaborn-whitegrid")
+        self._df[self._err].plot()
         plt.legend(bbox_to_anchor=(1.04, 1.2), loc="upper left")
 
     def __init__(self, observation_df: pd.DataFrame):
@@ -31,6 +38,8 @@ class PlotterAdapter(ObservationPlotter):
         self._scatter_plot = self._init_scatter_plot()
         self._date_plot = self._init_date_plot()
         self._histogram_plot = self._init_histogram_plot()
+        self._amus = [column for column in self._df.columns if "_err" not in column]
+        self._err = [column for column in self._df.columns if "_err" in column]
 
     def _init_scatter_plot(self):
         def _scatter_plot(x=list(self._df.columns),

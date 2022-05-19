@@ -76,7 +76,7 @@ class MockItxFile:
 
     @property
     def df(self):
-        return pd.DataFrame(data=self.data,
+        data_df = pd.DataFrame(data=self.data,
                             columns=self.amus,
                             index=self.times)
 
