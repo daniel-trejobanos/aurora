@@ -1,8 +1,8 @@
-from ipywidgets import interact, DatePicker
 import cufflinks as cf
 import pandas as pd
-from auroraPSI.observation_plotter import ObservationPlotter
 from IPython import get_ipython
+from auroraPSI.observation_plotter import ObservationPlotter
+from ipywidgets import interact, DatePicker
 from matplotlib import pyplot as plt
 
 

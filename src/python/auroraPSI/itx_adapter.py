@@ -1,12 +1,12 @@
-import pandas as pd
-
-from auroraPSI.observations import Observations
-from ast import literal_eval
-from auroraPSI.config.config import AuroraConfiguration
-from auroraPSI.validation import require_not_empty
-from auroraPSI.validation import ValidationError
-import numpy as np
 import logging
+from ast import literal_eval
+
+import numpy as np
+import pandas as pd
+from auroraPSI.config.config import AuroraConfiguration
+from auroraPSI.observations import Observations
+from auroraPSI.validation import ValidationError
+from auroraPSI.validation import require_not_empty
 
 
 def split_wave_name(wave_name_string: str):

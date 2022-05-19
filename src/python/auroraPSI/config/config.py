@@ -1,5 +1,4 @@
 from json import load
-import os
 
 import pkg_resources
 

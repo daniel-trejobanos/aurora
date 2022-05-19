@@ -2,8 +2,8 @@
 A collection of validation functions. These functions are used to validate function arguments.
 based on code by Mattias Dittbender used in ICU-Cockpit project.
 """
-from typing import Any, Tuple
 import re
+from typing import Any, Tuple
 
 
 class ValidationError(BaseException):

@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from auroraPSI.emulator import Emulator
 from auroraPSI.simulator import Simulator
