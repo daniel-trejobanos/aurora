@@ -1,0 +1,3 @@
+[submodule "BAMF"]
+	path = BAMF
+	url = git@github.com:daniel-trejobanos/BAMF.git
