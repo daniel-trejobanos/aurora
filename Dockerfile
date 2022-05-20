@@ -32,12 +32,10 @@ USER ${NB_USER}
 #       AND a (conda) environment.yml file for the below code to run,
 #       but you can remove one or the other.
 #
-COPY requirements.txt /tmp/
 RUN /opt/conda/bin/pip install -r /tmp/requirements.txt && \
     conda clean -y --all && \
     conda env export -n "root"
 COPY src/ /tmp/src
-RUN  pip install -e /tmp/src/python/
 # RENKU_VERSION determines the version of the renku CLI
 # that will be used in this image. To find the latest version,
 # visit https://pypi.org/project/renku/#history.
