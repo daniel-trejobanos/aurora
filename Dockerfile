@@ -33,6 +33,7 @@ USER ${NB_USER}
 #       but you can remove one or the other.
 #
 COPY requirements.txt /tmp/
+RUN /opt/conda/bin/python3 -m pip install --upgrade pip
 RUN /opt/conda/bin/pip install -r /tmp/requirements.txt && \
     conda clean -y --all && \
     conda env export -n "root"
