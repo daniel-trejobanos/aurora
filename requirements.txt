@@ -5,3 +5,4 @@ numpy==1.21.5
 matplotlib==3.5.1
 ipywidgets==7.7.0
 ipympl==0.9.1
+-e ./src/python/
