@@ -32,6 +32,7 @@ USER ${NB_USER}
 #       AND a (conda) environment.yml file for the below code to run,
 #       but you can remove one or the other.
 #
+COPY requirements.txt /tmp/
 RUN /opt/conda/bin/pip install -r /tmp/requirements.txt && \
     conda clean -y --all && \
     conda env export -n "root"
