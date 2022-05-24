@@ -1,7 +1,15 @@
 import logging
 from auroraPSI.config.config import AuroraConfiguration
 from auroraPSI.sources import Sources
+from re import split
 
+
+def split_variables_heading(variable_heading):
+    split_list = split("0*\d+-", variable_heading)
+    return_list = [variable for variable in split_list if len(variable) > 0]
+    return_list = [variable.strip() for variable in return_list ]
+    return_list = [variable.strip(",")  for variable in return_list]
+    return return_list
 
 
 class MATAdapter(Sources):
