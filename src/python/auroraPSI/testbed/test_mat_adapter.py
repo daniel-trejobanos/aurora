@@ -14,7 +14,30 @@ def test_split_header_stations(mock_mat_file):
     assert split_variables_heading(station_string) == expected_list_stations
 
 
-@pytest.mark.xfail
 def test_header_reading(mock_mat_file):
-    mat_adapter = MATAdapter(mock_mat_file.header)
+    mat_adapter = MATAdapter(mock_mat_file.file_contents)
     assert mat_adapter.variables == mock_mat_file.header_list_var
+
+
+@pytest.mark.xfail
+def test_variable_reading(mock_mat_file):
+    assert False
+
+
+@pytest.mark.xfail
+def test_location_reading(mock_mat_file):
+    assert False
+
+
+@pytest.mark.xfail
+def test_station_reading(mock_mat_file):
+    assert False
+
+
+@pytest.mark.xfail
+def test_pmf_reading(mock_mat_file):
+    assert False
+
+@pytest.mark.xfail
+def test_to_pandas(mock_mat_file):
+    assert False

@@ -1,17 +1,22 @@
+from abc import ABC, abstractmethod
 
 class Sources:
     """
     Class representing the OA  and inorganic sources detected by the  sensors
     """
-    def __init__(self, time, location):
-        self._time = time
-        self._location = location
 
     @property
+    @abstractmethod
     def time(self):
-        return self.time
+        pass
+
 
     @property
+    @abstractmethod
     def location(self):
-        return self.location
+        pass
 
+    @property
+    @abstractmethod
+    def variables(self):
+        pass

@@ -4,5 +4,11 @@
         "amus": "amus",
         "data": "Org_Specs",
         "error": "OrgSpecs_err"
+    },
+    "sources": {
+        "header": "Head_VAR_PMF_2011",
+        "PMFdata": "AMS_PMF_2011",
+        "lat_site": "lat_site",
+        "lon_site": "lon_site"
     }
 }

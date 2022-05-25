@@ -13,3 +13,7 @@ class AuroraConfiguration:
     @property
     def observations(self):
         return self._config_dictionary['observations']
+
+    @property
+    def sources(self):
+        return self._config_dictionary['sources']

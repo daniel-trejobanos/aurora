@@ -1,6 +1,4 @@
 from enum import Enum
-from auroraPSI.validation import va
-
 
 class LocationType:
     Urban = 1

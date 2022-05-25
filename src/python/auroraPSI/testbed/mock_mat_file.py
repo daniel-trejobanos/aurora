@@ -79,6 +79,13 @@ class MockMatlabFile:
         self._mock_array = np.zeros((10, 39))
         self._n_stations = len(self._header_list_station_name)
         self._mock_list_data = [self._mock_array] * self._n_stations
+        # TODO fill with the rest
+        self._file_contents = {
+            "Head_VAR_PMF_2011": self._header,
+            "AMS_PMF_2011": None,
+            "lat_site": None,
+            "lon_site": None
+        }
 
     @property
     def header(self):
@@ -111,3 +118,7 @@ class MockMatlabFile:
     @property
     def header_variable_name(self):
         return self._header_variable_name
+
+    @property
+    def file_contents(self):
+        return self._file_contents
