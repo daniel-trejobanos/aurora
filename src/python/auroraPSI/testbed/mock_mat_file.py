@@ -82,7 +82,7 @@ class MockMatlabFile:
         # TODO fill with the rest
         self._file_contents = {
             "Head_VAR_PMF_2011": self._header,
-            "AMS_PMF_2011": None,
+            "AMS_PMF_2011": self._mock_list_data,
             "lat_site": None,
             "lon_site": None
         }
