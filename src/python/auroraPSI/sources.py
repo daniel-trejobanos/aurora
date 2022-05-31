@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 class Sources:
     """
@@ -12,7 +13,7 @@ class Sources:
 
     @property
     @abstractmethod
-    def location(self):
+    def locations(self):
         pass
 
     @property
@@ -22,5 +23,5 @@ class Sources:
 
 
     @abstractmethod
-    def save(self):
+    def save(self, path:Path):
         pass

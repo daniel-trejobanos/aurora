@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import pandas as pd
 
@@ -21,19 +22,22 @@ class MATAdapter(Sources):
 
     @property
     def time(self):
-        pass
+        return self.data_frame.iloc[:, 0]
 
     @property
-    def location(self):
-        return self._location
+    def locations(self):
+        return self.data_frame.location
 
     @property
     def variables(self):
-        return self._variables
+        return self.data_frame.columns
 
     @property
     def data(self):
-        return self._data
+        return self._data_frame
+
+    def save(self, path:Path):
+        self.data_frame.to_feather(path)
 
 
     def __init__(self, contents_dictionary):
@@ -52,6 +56,7 @@ class MATAdapter(Sources):
         self._read_heading(headers)
         self._read_data()
         self._read_location()
+        self._data_frame = None
 
     def _read_heading(self, header):
         # TODO make the splitheadings configurable
@@ -88,4 +93,15 @@ class MATAdapter(Sources):
             location_df['type'] = np.repeat(station_type, variable_data.shape[0])
             all_locations_list.append(location_df)
 
-        return pd.concat(all_locations_list,axis=0)
+
+        concatenated_df =  pd.concat(all_locations_list,axis=0)
+        time_column = [column for column in concatenated_df.columns if "Time" in column]
+        rename_map={str(*time_column): "time"}
+        concatenated_df.rename(rename_map, inplace=True)
+        return concatenated_df
+
+    @property
+    def data_frame(self) -> pd.DataFrame:
+        if self._data_frame is None:
+            self._data_frame = self.to_pandas()
+        return self.to_pandas()
