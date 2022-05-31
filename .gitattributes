@@ -3,3 +3,5 @@ data/observations/Krakow_AMS_PMF_moz_data140422.h5 filter=lfs diff=lfs merge=lfs
 data/observations/KRK_input_10min.itx filter=lfs diff=lfs merge=lfs -text
 data/observatopms/KRK_species_10min filter=lfs diff=lfs merge=lfs -text
 data/pmf/krakov_pmf.csv filter=lfs diff=lfs merge=lfs -text
+data/observations/AMS_PMF_obs_2011.mat filter=lfs diff=lfs merge=lfs -text
+data/observations/VAR_CAMX_2011_16bit.mat filter=lfs diff=lfs merge=lfs -text
