@@ -33,3 +33,12 @@ CAMx6.5/test_run_data/ptsrce
 
 # JupyterLab
 .ipynb_checkpoints
+
+# Python cache
+**__pycache__/
+**.egg-info/
+
+
+# Nati stuff
+Pipfile
+Pipfile.lock
