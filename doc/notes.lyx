@@ -1,0 +1,316 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Current solution
+\end_layout
+
+\begin_layout Standard
+Variable 
+\begin_inset Formula 
+\[
+\mathcal{N}\left(FG,\text{diag}\left(W\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Likelyhood
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+General problem
+\end_layout
+
+\begin_layout Standard
+Let us consider the problem
+\begin_inset Formula 
+\[
+\dot{F},\dot{G}=\arg\min_{F\geq0,G\geq0}\|FG-X\|_{F}^{2}+\lambda\text{tr}\left(F^{T}\Delta F\right)\hspace{1em}\text{s.t. }G1=1
+\]
+
+\end_inset
+
+We can weight the objective function as
+\begin_inset Formula 
+\[
+\dot{F},\dot{G}=\arg\min_{F\geq0,G\geq0}\|W\circ\left(FG-X\right)\|_{F}^{2}+\lambda\text{tr}\left(F^{T}\Delta F\right)\hspace{1em}\text{s.t. }G1=1
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $W$
+\end_inset
+
+ represent a weight matrix.
+\end_layout
+
+\begin_layout Section
+Solve with respect of 
+\begin_inset Formula $F$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Let us first solve the problem with respect to 
+\begin_inset Formula $F$
+\end_inset
+
+ given 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Our goal is to minimize the following loss
+\begin_inset Formula 
+\[
+L(F)=\|FG-X\|_{F}^{2}+\lambda\text{tr}\left(F^{T}\Delta F\right)
+\]
+
+\end_inset
+
+The gradient is given by 
+\begin_inset Formula 
+\[
+\frac{1}{2}\nabla L\left(F\right)=FGG^{T}-XG^{T}+\lambda\Delta F.
+\]
+
+\end_inset
+
+A close form solution would be
+\begin_inset Formula 
+\[
+F=\left(XG^{T}-\lambda\Delta F\right)\left(GG^{T}\right)^{-1}.
+\]
+
+\end_inset
+
+Unfortunately, this does not satisfy the positivity constraint of 
+\begin_inset Formula $F.$
+\end_inset
+
+ Alternatively a gradient update becomes
+\begin_inset Formula 
+\begin{align*}
+F_{i,j}^{t+1} & =F_{i,j}^{t}-\gamma_{i,j}\nabla_{i,j}L\left(F^{t}\right)\\
+ & =F_{i,j}^{t}-\gamma_{i,j}\left[F^{t}GG^{T}+\lambda\Delta F\right]_{i,j}+\gamma_{i,j}\left[XG^{T}\right]_{i,j}\\
+ & =F_{i,j}^{t}\frac{\left[XG^{T}\right]_{i,j}}{\left[F^{t}GG^{T}+\lambda\Delta F\right]_{i,j}}
+\end{align*}
+
+\end_inset
+
+where we set 
+\begin_inset Formula $\gamma_{i,j}=\frac{F_{i,j}^{t}}{\left[F^{t}GG^{T}+\lambda\Delta F\right]_{i,j}}.$
+\end_inset
+
+ Note that since this is a multiplicative update, the postivity constraint
+ is always ensured.
+ Problematically, this is wrong since 
+\begin_inset Formula $\lambda\Delta F$
+\end_inset
+
+ is not always positive!
+\end_layout
+
+\begin_layout Standard
+Therefore, let us consider the auxiliary function 
+\begin_inset Formula $L_{a}(F,F^{t})$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+L_{a}(F,F^{t})=\|FG-X\|_{F}^{2}+\text{tr}\left(F^{tT}\Delta F^{t}\right)+2\text{tr}\left(\left(F-F^{t}\right)^{T}\Delta F^{t}\right)+\sigma(\Delta)\|F-F^{t}\|_{2}^{2}
+\]
+
+\end_inset
+
+Here we have 
+\begin_inset Formula $L_{a}(F^{t},F^{t})=L(F^{t})$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla_{F}L_{a}\left(F^{t},F^{t}\right)=\nabla_{F}L\left(F^{t}\right)$
+\end_inset
+
+
+\color red
+ 
+\color inherit
+from 
+\begin_inset Formula 
+\[
+x^{T}Cx\leq x^{tT}Cx^{t}+2\left(x-x^{t}\right)^{T}Cx^{t}+\sigma(C)\|x-x^{t}\|_{2}^{2}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+\|FG-X\|_{F}^{2}\leq\|F^{t}G-X\|_{F}^{2}+2\text{tr}\left(\left(F-F^{t}\right)^{T}\left(F^{t}GG^{T}-XG^{T}\right)\right)+
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Solve with respect of 
+\begin_inset Formula $G$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us now consider the update for 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Let us minimize the Lagrangian
+\begin_inset Formula 
+\[
+\mathcal{L}(G)=\frac{1}{2}\|FG-X\|_{F}^{2}+\nu^{T}\left(G1-1\right)
+\]
+
+\end_inset
+
+while ensuring that the constraint 
+\begin_inset Formula $G1-1$
+\end_inset
+
+ is always satisfied.
+ The gradient becomes
+\begin_inset Formula 
+\[
+\nabla\mathcal{L}(G)=F^{T}FG-F^{T}X+\nu1^{T}.
+\]
+
+\end_inset
+
+ A gradient update is given by
+\begin_inset Formula 
+\begin{align*}
+G_{i,j}^{t+1} & =G_{i,j}^{t}-\gamma_{i,j}\nabla\mathcal{L}(G^{t})\\
+ & =G_{i,j}^{t}-\gamma_{i,j}\left[F^{T}FG+\nu1^{T}\right]_{i,j}+\gamma_{i,j}\left[F^{T}X\right]_{i,j}\\
+ & =G_{i,j}^{t}\frac{\left[F^{T}X\right]_{i,j}}{\left[F^{T}FG+\nu1^{T}\right]_{i,j}}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\gamma_{i,j}=\frac{G_{i,j}^{t}}{\left[F^{T}FG+\nu\right]_{i,j}}.$
+\end_inset
+
+ To satisfy the KKT conditions, we need that 
+\begin_inset Formula $G^{t+1}1=1.$
+\end_inset
+
+ Therefore, we need to find 
+\begin_inset Formula $\nu$
+\end_inset
+
+ such that
+\begin_inset Formula 
+\[
+1=\sum_{i}G_{i,j}^{t+1}=\sum_{i}\frac{G_{i,j}^{t}\left[F^{T}X\right]_{i,j}}{\left[F^{T}FG\right]_{i,j}+\nu_{j}}.
+\]
+
+\end_inset
+
+We will use dicotomy to find it.
+ 
+\end_layout
+
+\end_body
+\end_document
